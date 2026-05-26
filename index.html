@@ -475,11 +475,11 @@ function drawObstacles() { for (const ob of obstacles) ob.drawFn(ob.x, ob.y, ob.
 // ── CHASERS ────────────────────────────────────────────────────────────────
 const CHASER_DEFS = [
   { name:'Nick',   title:'Iron Man',        ms:1000, spd:88,  shirt:'#cc2200', pants:'#1a1a1a', extras:{chestArc:'#ffd700'} },
-  { name:'Nikki',  title:'The Pace Killer', ms:2000, spd:112, shirt:'#8b5cf6', pants:'#2a1040', extras:null },
-  { name:'Sam',    title:'HR is Watching',  ms:3500, spd:138, shirt:'#6b7280', pants:'#374151', extras:null },
-  { name:'Andrew', title:'Mandatory 1on1',  ms:5000, spd:168, shirt:'#16a34a', pants:'#14532d', extras:{clipboard:true} },
+  { name:'Nikki',  title:'sugar cat mom', ms:2000, spd:112, shirt:'#8b5cf6', pants:'#2a1040', extras:null },
+  { name:'Sam',    title:'oui oui baguette',  ms:3500, spd:138, shirt:'#6b7280', pants:'#374151', extras:null },
+  { name:'Andrew', title:'wise sage of beer',  ms:5000, spd:168, shirt:'#16a34a', pants:'#14532d', extras:{clipboard:true} },
 ];
-const ALEX_DEF = { name:'Alex Taylor', title:'The Quarterly Review', ms:7500, shirt:'#111', pants:'#0a0a0a', extras:{suit:'#222',tie:'#cc0000'} };
+const ALEX_DEF = { name:'Alex Taylor', title:'aura king', ms:7500, shirt:'#111', pants:'#0a0a0a', extras:{suit:'#222',tie:'#cc0000'} };
 
 function updateChasers(dt) {
   for (const def of CHASER_DEFS) {
@@ -550,7 +550,7 @@ function checkCollisions() {
   }
   const cw=Math.round(38*S);
   for (const c of activeChasers){if(c.x+cw>=pb.x){endGame(`Caught by ${c.name} — "${c.title}"!`,c.x+cw/2,GROUND-Math.round(30*S));return;}}
-  if(alexObj&&!alexObj.flying&&alexObj.x+Math.round(40*S)>=pb.x) endGame('Caught by Alex Taylor — "The Quarterly Review"!',alexObj.x+Math.round(22*S),GROUND-Math.round(32*S));
+  if(alexObj&&!alexObj.flying&&alexObj.x+Math.round(40*S)>=pb.x) endGame('Caught by Alex Taylor — "aura king"!',alexObj.x+Math.round(22*S),GROUND-Math.round(32*S));
 }
 
 // ── PARTICLES ──────────────────────────────────────────────────────────────
