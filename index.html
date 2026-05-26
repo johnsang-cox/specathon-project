@@ -474,25 +474,28 @@ function drawObstacles() { for (const ob of obstacles) ob.drawFn(ob.x, ob.y, ob.
 
 // ── CHASERS ────────────────────────────────────────────────────────────────
 const CHASER_DEFS = [
-  { name:'Nick',   title:'Iron Man',        ms:1000, spd:88,  shirt:'#cc2200', pants:'#1a1a1a', extras:{chestArc:'#ffd700'} },
-  { name:'Nikki',  title:'sugar cat mom', ms:2000, spd:112, shirt:'#8b5cf6', pants:'#2a1040', extras:null },
-  { name:'Sam',    title:'oui oui baguette',  ms:3500, spd:138, shirt:'#6b7280', pants:'#374151', extras:null },
-  { name:'Andrew', title:'wise sage of beer',  ms:5000, spd:168, shirt:'#16a34a', pants:'#14532d', extras:{clipboard:true} },
+  { name:'Nick',   title:'Iron Man',         ms:150, spd:88,  shirt:'#cc2200', pants:'#1a1a1a', extras:{chestArc:'#ffd700'}, fixedOffset:45  },
+  { name:'Nikki',  title:'Sugar Cat Mom',    ms:300, spd:112, shirt:'#8b5cf6', pants:'#2a1040', extras:null,                 fixedOffset:93  },
+  { name:'Sam',    title:'Oui Oui Baguette', ms:450, spd:138, shirt:'#6b7280', pants:'#374151', extras:null,                 fixedOffset:141 },
+  { name:'Andrew', title:'Wise Sage of Beer',ms:600, spd:168, shirt:'#16a34a', pants:'#14532d', extras:{clipboard:true},     fixedOffset:189 },
 ];
-const ALEX_DEF = { name:'Alex Taylor', title:'aura king', ms:7500, shirt:'#111', pants:'#0a0a0a', extras:{suit:'#222',tie:'#cc0000'} };
+const ALEX_DEF = { name:'Alex Taylor', title:'Aura King', ms:750, shirt:'#111', pants:'#0a0a0a', extras:{suit:'#222',tie:'#cc0000'}, fixedOffset:237 };
 
 function updateChasers(dt) {
+  const ch = Math.round(60*S);
   for (const def of CHASER_DEFS) {
     if (steps >= def.ms && !activeChasers.find(c => c.name===def.name))
-      activeChasers.push({ ...def, x: -Math.round(90*S), frame:0, frameTimer:0 });
+      activeChasers.push({ ...def, x: -Math.round(90*S), y: GROUND-ch, ducking: false, frame:0, frameTimer:0 });
   }
   if (steps >= ALEX_DEF.ms && !alexObj)
-    alexObj = { ...ALEX_DEF, x:-Math.round(100*S), frame:0, frameTimer:0, flying:false, flyVy:0, flyTimer:0, y:GROUND-Math.round(64*S) };
+    alexObj = { ...ALEX_DEF, x:-Math.round(100*S), frame:0, frameTimer:0, flying:false, flyVy:0, flyTimer:0, y:GROUND-Math.round(64*S), ducking:false };
 
-  const px = player.x;
   for (const c of activeChasers) {
     c.frameTimer += dt; if (c.frameTimer>=0.1){c.frameTimer=0;c.frame=1-c.frame;}
-    c.x += c.spd*S*deltaMultiplier*dt; if (c.x>px-5) c.x=px-5;
+    const fixedX = player.x - Math.round(c.fixedOffset * S);
+    c.x = Math.min(c.x + c.spd*S*deltaMultiplier*dt, fixedX);
+    c.y = player.y;
+    c.ducking = player.ducking;
   }
   if (alexObj) {
     alexObj.frameTimer+=dt; if(alexObj.frameTimer>=0.08){alexObj.frameTimer=0;alexObj.frame=1-alexObj.frame;}
@@ -500,7 +503,10 @@ function updateChasers(dt) {
       alexObj.flyTimer+=dt; alexObj.x+=Math.round(380*S)*dt; alexObj.flyVy+=900*S*dt; alexObj.y+=alexObj.flyVy*dt;
       if (alexObj.flyTimer>1.0){alexObj=null;jukeState=0;deltaMultiplier=1;alexBaseSpeed=Math.min(alexBaseSpeed+25,340);}
     } else {
-      alexObj.x+=alexBaseSpeed*S*deltaMultiplier*dt; if(alexObj.x>px-5) alexObj.x=px-5;
+      const fixedX = player.x - Math.round(ALEX_DEF.fixedOffset * S);
+      alexObj.x = Math.min(alexObj.x + alexBaseSpeed*S*deltaMultiplier*dt, fixedX);
+      alexObj.y = player.y;
+      alexObj.ducking = player.ducking;
     }
   }
 }
@@ -508,14 +514,18 @@ function updateChasers(dt) {
 function drawChasers() {
   const cw=Math.round(38*S), ch=Math.round(60*S);
   for (const c of activeChasers) {
-    drawPerson(c.x, GROUND-ch, cw, ch, '#FDBCB4', c.shirt, c.pants, c.frame, false, c.extras);
-    drawNameTag(c.name, c.title, c.x+cw/2, GROUND-ch);
+    const cy = c.ducking ? GROUND - ch*0.52 : c.y;
+    const cdh = c.ducking ? ch*0.52 : ch;
+    drawPerson(c.x, cy, cw, cdh, '#FDBCB4', c.shirt, c.pants, c.frame, c.ducking, c.extras);
+    drawNameTag(c.name, c.title, c.x+cw/2, cy);
   }
   if (alexObj) {
     const aw=Math.round(44*S), ah=Math.round(64*S);
-    drawPerson(alexObj.x, alexObj.y, aw, ah, '#FDBCB4', alexObj.shirt, alexObj.pants, alexObj.frame, false, alexObj.extras);
-    drawNameTag(alexObj.name, alexObj.title, alexObj.x+aw/2, alexObj.y);
-    if (alexObj.flying){ ctx.font=`${Math.round(24*S)}px Arial`; ctx.fillText('💥',alexObj.x+6,alexObj.y-8); }
+    const ay = alexObj.ducking ? GROUND - ah*0.52 : alexObj.y;
+    const adh = alexObj.ducking ? ah*0.52 : ah;
+    drawPerson(alexObj.x, ay, aw, adh, '#FDBCB4', alexObj.shirt, alexObj.pants, alexObj.frame, alexObj.ducking, alexObj.extras);
+    drawNameTag(alexObj.name, alexObj.title, alexObj.x+aw/2, ay);
+    if (alexObj.flying){ ctx.font=`${Math.round(24*S)}px Arial`; ctx.fillText('💥',alexObj.x+6,ay-8); }
   }
 }
 
@@ -548,9 +558,6 @@ function checkCollisions() {
     const m=Math.round(7*S);
     if(rectsOverlap(pb,{x:ob.x+m,y:ob.y+m,w:ob.w-m*2,h:ob.h-m*2})){endGame(`Wiped out by the ${ob.id}!`,pb.x+pb.w/2,pb.y+pb.h/2);return;}
   }
-  const cw=Math.round(38*S);
-  for (const c of activeChasers){if(c.x+cw>=pb.x){endGame(`Caught by ${c.name} — "${c.title}"!`,c.x+cw/2,GROUND-Math.round(30*S));return;}}
-  if(alexObj&&!alexObj.flying&&alexObj.x+Math.round(40*S)>=pb.x) endGame('Caught by Alex Taylor — "aura king"!',alexObj.x+Math.round(22*S),GROUND-Math.round(32*S));
 }
 
 // ── PARTICLES ──────────────────────────────────────────────────────────────
