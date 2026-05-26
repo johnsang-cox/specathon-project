@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cox Dash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #0A1628; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
+body { background: #0A1628; overflow: hidden; font-family: 'Barlow', 'Segoe UI', Arial, sans-serif; }
 #game-container { position: relative; width: 100vw; height: 100vh; }
 #canvas { display: block; }
 #hud {
@@ -49,6 +51,37 @@ body { background: #0A1628; overflow: hidden; font-family: 'Segoe UI', Arial, sa
 .died-msg { font-size: 14px; color: #ff6b6b; margin-bottom: 20px; }
 .restart-hint { font-size: 12px; color: #3a5070; margin-top: 6px; }
 .hidden { display: none !important; }
+
+/* ── START SCREEN ── */
+#start-screen { background: radial-gradient(ellipse at 50% 30%, rgba(0,87,168,0.4) 0%, rgba(10,22,40,0.97) 65%); font-family: 'Barlow','Segoe UI',sans-serif; }
+.ss-scanlines { position:absolute;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px); }
+.ss-corner { position:absolute;width:28px;height:28px;pointer-events:none;z-index:1;border-color:#00A9E0;border-style:solid;opacity:0.45; }
+.ss-corner-tl{top:14px;left:14px;border-width:2px 0 0 2px}.ss-corner-tr{top:14px;right:14px;border-width:2px 2px 0 0}.ss-corner-bl{bottom:14px;left:14px;border-width:0 0 2px 2px}.ss-corner-br{bottom:14px;right:14px;border-width:0 2px 2px 0}
+#start-screen>*{position:relative;z-index:2}
+.ss-eyebrow{font-size:9px;letter-spacing:5px;color:#00A9E0;text-transform:uppercase;margin-bottom:6px;opacity:0.65;font-weight:700;animation:ssFade 0.5s ease both}
+.ss-title{font-family:'Bebas Neue','Impact',sans-serif;font-size:clamp(68px,9vw,112px);font-weight:400;letter-spacing:8px;line-height:1;margin:0 0 4px;color:#fff;text-shadow:0 0 60px rgba(0,169,224,0.5),0 0 20px rgba(0,169,224,0.25);animation:ssFade 0.4s ease both,ssPulse 3s 0.5s ease-in-out infinite}
+.ss-title .ss-blue{color:#00A9E0;text-shadow:0 0 40px rgba(0,169,224,0.9),0 0 80px rgba(0,169,224,0.4)}
+.ss-tagline{font-size:13px;color:#7a90aa;font-style:italic;margin-bottom:10px;animation:ssFade 0.5s 0.1s ease both}
+.ss-badge{background:linear-gradient(90deg,rgba(0,87,168,0.35),rgba(0,169,224,0.25),rgba(0,87,168,0.35));border:1px solid rgba(0,169,224,0.35);border-radius:20px;padding:4px 16px;font-size:10px;font-weight:700;letter-spacing:2px;color:#00A9E0;text-transform:uppercase;margin-bottom:16px;animation:ssFade 0.5s 0.15s ease both}
+.ss-section-label{font-size:8px;letter-spacing:4px;color:rgba(0,169,224,0.45);text-transform:uppercase;margin-bottom:7px;animation:ssFade 0.5s 0.25s ease both}
+.ss-managers{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;justify-content:center;animation:ssFade 0.5s 0.3s ease both}
+.ss-mgr{background:rgba(0,87,168,0.1);border:1px solid rgba(0,169,224,0.15);border-radius:6px;padding:6px 11px;text-align:center;min-width:86px;transition:border-color 0.2s,background 0.2s;cursor:default}
+.ss-mgr:hover{border-color:rgba(0,169,224,0.45);background:rgba(0,87,168,0.22)}
+.ss-mgr-boss{border-color:rgba(255,215,0,0.35);background:rgba(255,165,0,0.07)}
+.ss-mgr-boss:hover{border-color:rgba(255,215,0,0.65)}
+.ss-mgr-name{font-size:11px;font-weight:700;color:#fff}
+.ss-mgr-title{font-size:8px;color:#6a8090;font-style:italic;margin-top:2px}
+.ss-boss-tag{font-size:7px;font-weight:800;letter-spacing:1.5px;color:#FFD700;text-transform:uppercase;margin-top:3px}
+.ss-controls{display:flex;gap:18px;margin-bottom:18px;animation:ssFade 0.5s 0.35s ease both}
+.ss-ctrl{display:flex;flex-direction:column;align-items:center;gap:4px}
+.ss-key{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);border-bottom:2px solid rgba(255,255,255,0.1);border-radius:5px;padding:4px 10px;font-size:12px;font-weight:700;color:#e0eaf5;letter-spacing:1px;box-shadow:0 2px 0 rgba(0,0,0,0.4)}
+.ss-ctrl-label{font-size:9px;color:#4a6070;letter-spacing:1px;text-transform:uppercase}
+.ss-start-btn{background:linear-gradient(135deg,#0057A8,#0078d4);border:1px solid rgba(0,169,224,0.45);box-shadow:0 0 28px rgba(0,120,212,0.45),0 4px 18px rgba(0,87,168,0.5);font-family:'Bebas Neue','Impact',sans-serif;font-size:22px;letter-spacing:3px;padding:13px 54px;border-radius:6px;animation:ssFade 0.5s 0.45s ease both,ssBtnPulse 2.5s 1s ease-in-out infinite}
+.ss-start-btn:hover{background:linear-gradient(135deg,#0068cc,#00A9E0)!important;box-shadow:0 0 48px rgba(0,169,224,0.65),0 4px 22px rgba(0,87,168,0.65)!important;transform:scale(1.05)!important}
+@keyframes ssFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ssPulse{0%,100%{text-shadow:0 0 60px rgba(0,169,224,0.5),0 0 20px rgba(0,169,224,0.25)}50%{text-shadow:0 0 80px rgba(0,169,224,0.75),0 0 40px rgba(0,169,224,0.45)}}
+@keyframes ssBtnPulse{0%,100%{box-shadow:0 0 28px rgba(0,120,212,0.45),0 4px 18px rgba(0,87,168,0.5)}50%{box-shadow:0 0 48px rgba(0,169,224,0.6),0 4px 22px rgba(0,87,168,0.65)}}
+
 @keyframes fadeUp {
   0%   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
   100% { opacity: 0; transform: translate(-50%,-130%) scale(1.4); }
@@ -60,14 +93,28 @@ body { background: #0A1628; overflow: hidden; font-family: 'Segoe UI', Arial, sa
   <canvas id="canvas"></canvas>
   <div id="hud">🏃 Steps: <span id="step-display">0</span></div>
   <div id="start-screen" class="overlay">
-    <h1>COX <span>DASH</span></h1>
-    <div class="subtitle">Cox Automotive Step Challenge</div>
-    <div class="tagline">Don't get caught by your manager</div>
-    <div class="controls-hint">
-      SPACE / ↑ &nbsp;Jump &nbsp;|&nbsp; ↓ &nbsp;Duck<br>
-      ← then → quickly &nbsp;Juke Alex Taylor
+    <div class="ss-scanlines"></div>
+    <div class="ss-corner ss-corner-tl"></div><div class="ss-corner ss-corner-tr"></div>
+    <div class="ss-corner ss-corner-bl"></div><div class="ss-corner ss-corner-br"></div>
+    <div class="ss-eyebrow">Cox Automotive Presents</div>
+    <h1 class="ss-title">COX &nbsp;<span class="ss-blue">DASH</span></h1>
+    <div class="ss-tagline">Don't get caught by your manager</div>
+    <div class="ss-badge">🏃 Step Challenge 2026 🏃</div>
+    <div class="ss-section-label">Your Pursuers</div>
+    <div class="ss-managers">
+      <div class="ss-mgr"><div class="ss-mgr-name">Nick</div><div class="ss-mgr-title">"Iron Man"</div></div>
+      <div class="ss-mgr"><div class="ss-mgr-name">Nikki</div><div class="ss-mgr-title">"Sugar Cat Mom"</div></div>
+      <div class="ss-mgr"><div class="ss-mgr-name">Sam</div><div class="ss-mgr-title">"Oui Oui Baguette"</div></div>
+      <div class="ss-mgr"><div class="ss-mgr-name">Andrew</div><div class="ss-mgr-title">"Wise Sage of Beer"</div></div>
+      <div class="ss-mgr ss-mgr-boss"><div class="ss-mgr-name">Alex Taylor</div><div class="ss-mgr-title">"Aura King"</div><div class="ss-boss-tag">⚡ Final Boss</div></div>
     </div>
-    <button class="btn" id="start-btn">Start Running</button>
+    <div class="ss-section-label">Controls</div>
+    <div class="ss-controls">
+      <div class="ss-ctrl"><span class="ss-key">SPACE / ↑</span><span class="ss-ctrl-label">Jump</span></div>
+      <div class="ss-ctrl"><span class="ss-key">↓</span><span class="ss-ctrl-label">Duck</span></div>
+      <div class="ss-ctrl"><span class="ss-key">← →</span><span class="ss-ctrl-label">Juke Alex</span></div>
+    </div>
+    <button class="btn ss-start-btn" id="start-btn">▶ Start Running</button>
     <div id="start-leaderboard" class="leaderboard hidden"></div>
   </div>
   <div id="gameover-screen" class="overlay hidden">
@@ -106,7 +153,7 @@ window.addEventListener('resize', () => {
 // ── CONSTANTS ──────────────────────────────────────────────────────────────
 const GRAVITY     = 1750;
 const JUMP_VEL    = -660;
-const STEP_RATE   = 4;
+const STEP_RATE   = 12;
 const LS_KEY      = 'coxdash_v1';
 const JUKE_WINDOW = 0.42;
 
@@ -115,7 +162,7 @@ const pw = () => Math.round(40 * S);
 const ph = () => Math.round(60 * S);
 
 // ── STATE ──────────────────────────────────────────────────────────────────
-let state = 'idle', steps = 0, deltaMultiplier = 1, lastTime = 0;
+let state = 'idle', steps = 0, deltaMultiplier = 1, lastTime = 0, speedFactor = 0, auraTime = 0, alexSpawned = false;
 let particles = [], shakeTimer = 0, shakeAmt = 0;
 let bgFar = 0, bgNear = 0;
 let obstacles = [], obstacleTimer = 0;
@@ -125,6 +172,15 @@ let scores = [], lastCurrentScore = null;
 let alexBaseSpeed = 220;
 
 const player = { x: PLAYER_X, y: GROUND - ph(), vy: 0, onGround: true, ducking: false, frame: 0, frameTimer: 0 };
+
+// ── FACE IMAGES ────────────────────────────────────────────────────────────
+const faceImgs = {};
+['Nick','Nikki','Alex Taylor'].forEach(key => {
+  const fileMap = { 'Nick': 'nickray.jpeg', 'Nikki': 'nikkimunir.jpeg', 'Alex Taylor': 'alextaylor.jpeg' };
+  const img = new Image();
+  img.src = 'assets/' + fileMap[key];
+  faceImgs[key] = img;
+});
 
 // ── DOM ────────────────────────────────────────────────────────────────────
 const stepDisplay    = document.getElementById('step-display');
@@ -137,129 +193,140 @@ const gameoverLB     = document.getElementById('gameover-leaderboard');
 
 // ── BACKGROUND ─────────────────────────────────────────────────────────────
 function drawBackground(rawDt) {
-  const spd = 160 * S * deltaMultiplier;
+  const spd = 160 * ((230 + Math.min(speedFactor,4000) * 0.028) / 230) * S * deltaMultiplier;
   bgFar  = (bgFar  + spd * 0.38 * rawDt) % W;
   bgNear = (bgNear + spd * rawDt) % W;
 
-  // Wall
-  ctx.fillStyle = '#EEE9E2';
-  ctx.fillRect(0, 0, W, GROUND);
+  // ── CEILING ──
+  ctx.fillStyle = COX_BLUE;
+  ctx.fillRect(0, 0, W, Math.round(10 * S));
+  ctx.fillStyle = '#e8e4de';
+  ctx.fillRect(0, Math.round(10 * S), W, Math.round(10 * S));
+
+  // Ceiling light panels (far layer)
+  for (let i = -1; i < 2; i++) {
+    const ox = i * W - bgFar * 0.5;
+    const lStep = Math.round(260 * S), lw = Math.round(110 * S);
+    const lcols = Math.ceil(W / lStep) + 3;
+    for (let j = 0; j < lcols; j++) {
+      const lx = ox + j * lStep + Math.round(30 * S);
+      ctx.fillStyle = '#fefce8';
+      ctx.fillRect(lx, Math.round(10 * S), lw, Math.round(10 * S));
+      // soft glow below
+      const lg = ctx.createLinearGradient(0, Math.round(20*S), 0, Math.round(55*S));
+      lg.addColorStop(0, 'rgba(255,252,200,0.18)');
+      lg.addColorStop(1, 'rgba(255,252,200,0)');
+      ctx.fillStyle = lg;
+      ctx.fillRect(lx - Math.round(8*S), Math.round(20*S), lw + Math.round(16*S), Math.round(35*S));
+    }
+  }
+
+  // ── WALL ──
+  ctx.fillStyle = '#ede8e1';
+  ctx.fillRect(0, Math.round(20 * S), W, GROUND - Math.round(20 * S));
+
+  // Subtle wall gradient (top darker, bottom lighter)
+  const wallG = ctx.createLinearGradient(0, Math.round(20*S), 0, GROUND);
+  wallG.addColorStop(0, 'rgba(0,0,0,0.06)');
+  wallG.addColorStop(0.4, 'rgba(0,0,0,0)');
+  wallG.addColorStop(1, 'rgba(0,0,0,0.03)');
+  ctx.fillStyle = wallG;
+  ctx.fillRect(0, Math.round(20*S), W, GROUND - Math.round(20*S));
 
   for (let i = -1; i < 2; i++) {
     const ox = i * W - bgFar;
-    const tw = Math.round(210 * S);
-    const cols = Math.ceil(W / tw) + 3;
 
-    // Cubicle dividers
-    ctx.fillStyle = '#c5bbb0';
+    // Cubicle dividers — spaced wider, cleaner
+    const tw = Math.round(280 * S);
+    const cols = Math.ceil(W / tw) + 3;
+    ctx.fillStyle = '#cdc6bc';
     for (let j = 0; j < cols; j++) {
-      ctx.fillRect(ox + j * tw + Math.round(40 * S), Math.round(50 * S), Math.round(6 * S), GROUND - Math.round(50 * S));
+      ctx.fillRect(ox + j * tw, Math.round(20*S), Math.round(5*S), GROUND - Math.round(20*S));
     }
 
-    // Windows
-    const ww = Math.round(110 * S), wh = Math.round(85 * S), wy = Math.round(45 * S);
-    const wStep = Math.round(255 * S), wCols = Math.ceil(W / wStep) + 2;
+    // Windows — cleaner, taller, blue sky tint
+    const ww = Math.round(120*S), wh = Math.round(90*S), wy = Math.round(28*S);
+    const wStep = Math.round(280*S), wCols = Math.ceil(W / wStep) + 2;
     for (let j = 0; j < wCols; j++) {
-      const wx = ox + j * wStep + Math.round(55 * S);
-      ctx.fillStyle = '#b8ddf5';
+      const wx = ox + j * wStep + Math.round(70*S);
+      // Sky gradient inside window
+      const wg = ctx.createLinearGradient(0, wy, 0, wy + wh);
+      wg.addColorStop(0, '#87CEEB');
+      wg.addColorStop(1, '#c8e8f8');
+      ctx.fillStyle = wg;
       ctx.fillRect(wx, wy, ww, wh);
-      ctx.strokeStyle = '#7a9ab0'; ctx.lineWidth = Math.round(2 * S);
+      // Window frame
+      ctx.strokeStyle = '#8aaabf'; ctx.lineWidth = Math.round(3*S);
       ctx.strokeRect(wx, wy, ww, wh);
+      // Panes
+      ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = Math.round(2*S);
       ctx.beginPath();
       ctx.moveTo(wx + ww/2, wy); ctx.lineTo(wx + ww/2, wy + wh);
       ctx.moveTo(wx, wy + wh/2); ctx.lineTo(wx + ww, wy + wh/2);
       ctx.stroke();
-      ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 1;
-      for (let b = 0; b < 6; b++) {
-        ctx.beginPath();
-        ctx.moveTo(wx, wy + 3 + b * Math.round(12 * S));
-        ctx.lineTo(wx + ww, wy + 3 + b * Math.round(12 * S));
-        ctx.stroke();
-      }
+      // Window sill
+      ctx.fillStyle = '#b8b0a6';
+      ctx.fillRect(wx - Math.round(4*S), wy + wh, ww + Math.round(8*S), Math.round(5*S));
     }
 
-    // Cox Automotive poster
-    const pStep = Math.round(400 * S), pCols = Math.ceil(W / pStep) + 2;
+  }
+
+  // ── POSTERS — drawn after all windows so they render in front ──
+  for (let i = -1; i < 2; i++) {
+    const ox = i * W - bgFar;
+    const pStep = Math.round(520*S), pCols = Math.ceil(W / pStep) + 3;
     for (let j = 0; j < pCols; j++) {
-      const px2 = ox + j * pStep + Math.round(320 * S);
-      const py2 = Math.round(68 * S);
-      const pw2 = Math.round(92 * S), ph2 = Math.round(68 * S);
+      const px2 = ox + j * pStep + Math.round(160*S);
+      const py2 = Math.round(20*S);
+      const pw2 = Math.round(110*S), ph2 = Math.round(68*S);
+      ctx.fillStyle = 'rgba(0,0,0,0.10)';
+      ctx.fillRect(px2+2, py2+2, pw2, ph2);
       ctx.fillStyle = '#fff';
       ctx.fillRect(px2, py2, pw2, ph2);
-      ctx.strokeStyle = COX_BLUE; ctx.lineWidth = Math.round(2 * S);
-      ctx.strokeRect(px2, py2, pw2, ph2);
       ctx.fillStyle = COX_BLUE;
-      ctx.fillRect(px2, py2, pw2, Math.round(18 * S));
+      ctx.fillRect(px2, py2, pw2, Math.round(22*S));
       ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
-      ctx.font = `bold ${Math.round(7 * S)}px Arial`;
-      ctx.fillText('COX AUTOMOTIVE', px2 + pw2/2, py2 + Math.round(13 * S));
-      ctx.fillStyle = '#333';
-      ctx.font = `bold ${Math.round(7 * S)}px Arial`;
-      ctx.fillText('Move Forward.', px2 + pw2/2, py2 + Math.round(33 * S));
-      ctx.fillStyle = '#777';
-      ctx.font = `${Math.round(6 * S)}px Arial`;
-      ctx.fillText('Together we drive', px2 + pw2/2, py2 + Math.round(47 * S));
-      ctx.fillText('innovation forward', px2 + pw2/2, py2 + Math.round(58 * S));
-      ctx.textAlign = 'left';
-    }
-
-    // Step Challenge 2026 wall banner
-    const bStep = Math.round(420 * S), bCols = Math.ceil(W / bStep) + 2;
-    for (let j = 0; j < bCols; j++) {
-      const bx = ox + j * bStep + Math.round(80 * S);
-      const by2 = Math.round(158 * S);
-      const bw2 = Math.round(150 * S), bh2 = Math.round(20 * S);
-      ctx.fillStyle = COX_LIGHT;
-      ctx.fillRect(bx, by2, bw2, bh2);
-      ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
-      ctx.font = `bold ${Math.round(8 * S)}px Arial`;
-      ctx.fillText('🏃 STEP CHALLENGE 2026 🏃', bx + bw2/2, by2 + Math.round(14 * S));
+      ctx.font = `bold ${Math.round(8*S)}px Arial`;
+      ctx.fillText('COX AUTOMOTIVE', px2 + pw2/2, py2 + Math.round(15*S));
+      ctx.fillStyle = '#1a1a1a';
+      ctx.font = `bold ${Math.round(9*S)}px Arial`;
+      ctx.fillText('Move Forward.', px2 + pw2/2, py2 + Math.round(38*S));
+      ctx.fillStyle = '#999';
+      ctx.font = `${Math.round(7*S)}px Arial`;
+      ctx.fillText('Step Challenge 2026', px2 + pw2/2, py2 + Math.round(54*S));
+      ctx.strokeStyle = '#c0bab4'; ctx.lineWidth = Math.round(1*S);
+      ctx.strokeRect(px2, py2, pw2, ph2);
       ctx.textAlign = 'left';
     }
   }
 
-  // Floor
-  ctx.fillStyle = '#E2DAD0';
+  // ── FLOOR ──
+  // Base floor color
+  ctx.fillStyle = '#d8d2ca';
   ctx.fillRect(0, GROUND, W, H - GROUND);
 
+  // Wide floor tiles — far apart so no strobing at speed
   for (let i = -1; i < 2; i++) {
     const ox = i * W - bgNear;
-    const tw2 = Math.round(110 * S);
+    const tw2 = Math.round(200 * S);
     const cols2 = Math.ceil(W / tw2) + 3;
     for (let j = 0; j < cols2; j++) {
-      ctx.fillStyle = j % 2 === 0 ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)';
-      ctx.fillRect(ox + j * tw2, GROUND, tw2, H - GROUND);
-      ctx.strokeStyle = '#ccc4b8'; ctx.lineWidth = 1;
+      if (j % 2 === 0) {
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fillRect(ox + j * tw2, GROUND, tw2, H - GROUND);
+      }
+      ctx.strokeStyle = 'rgba(0,0,0,0.06)'; ctx.lineWidth = 1;
       ctx.strokeRect(ox + j * tw2, GROUND, tw2, H - GROUND);
     }
-    // floor sheen
-    ctx.fillStyle = 'rgba(255,255,255,0.18)';
-    ctx.fillRect(ox, GROUND + Math.round(3 * S), W, Math.round(5 * S));
   }
 
-  // Ground line
-  ctx.fillStyle = '#9a9088';
-  ctx.fillRect(0, GROUND, W, Math.round(3 * S));
+  // Floor sheen strip
+  ctx.fillStyle = 'rgba(255,255,255,0.22)';
+  ctx.fillRect(0, GROUND + Math.round(2*S), W, Math.round(4*S));
 
-  // Cox blue ceiling stripe
-  ctx.fillStyle = COX_BLUE;
-  ctx.fillRect(0, 0, W, Math.round(8 * S));
-  ctx.fillStyle = '#F0EDE8';
-  ctx.fillRect(0, Math.round(8 * S), W, Math.round(8 * S));
-
-  // Ceiling lights
-  for (let i = -1; i < 2; i++) {
-    const ox = i * W - bgNear * 0.5;
-    const lStep = Math.round(220 * S);
-    const lw = Math.round(90 * S);
-    const cols3 = Math.ceil(W / lStep) + 3;
-    for (let j = 0; j < cols3; j++) {
-      ctx.fillStyle = '#fffde0';
-      ctx.fillRect(ox + j * lStep + Math.round(18 * S), Math.round(8 * S), lw, Math.round(8 * S));
-      ctx.fillStyle = 'rgba(255,253,200,0.14)';
-      ctx.fillRect(ox + j * lStep + Math.round(18 * S), Math.round(16 * S), lw, Math.round(24 * S));
-    }
-  }
+  // ── GROUND LINE ──
+  ctx.fillStyle = '#a09890';
+  ctx.fillRect(0, GROUND, W, Math.round(3*S));
 }
 
 // ── CHARACTER DRAWING ───────────────────────────────────────────────────────
@@ -270,25 +337,133 @@ function drawPerson(x, y, w, h, skin, shirt, pants, frame, ducking, extras) {
   const legH = h * 0.33;
 
   if (ducking) {
-    const dh = h * 0.52, dy = y + h - dh;
-    ctx.fillStyle = shirt; ctx.fillRect(x + 3, dy + hR * 1.6, w - 6, dh * 0.38);
-    ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(cx, dy + hR, hR, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = pants; ctx.fillRect(x, dy + dh * 0.48, w, dh * 0.42);
+    const dkR = hR * 0.78;
+    const headCx = cx + w * 0.10;
+    const headCy = y + dkR;
+    const shoulderY = headCy + dkR;
+    const hipY = y + h * 0.68;
+    const groundY = y + h;
+
+    // Head — tucked down and forward
+    ctx.fillStyle = skin;
+    ctx.beginPath(); ctx.arc(headCx, headCy, dkR, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#1a1a1a';
+    ctx.beginPath(); ctx.arc(headCx + dkR*0.38, headCy + dkR*0.12, dkR*0.12, 0, Math.PI*2); ctx.fill();
+
+    // Torso — leaning forward (shoulders ahead of hips)
+    ctx.fillStyle = shirt;
+    ctx.beginPath();
+    ctx.moveTo(cx - w*0.20, shoulderY);
+    ctx.lineTo(cx + w*0.14, shoulderY);
+    ctx.lineTo(cx + w*0.02, hipY);
+    ctx.lineTo(cx - w*0.32, hipY);
+    ctx.closePath(); ctx.fill();
+
+    // Arms — pumping, alternating with frame
+    ctx.strokeStyle = shirt; ctx.lineWidth = Math.max(3, Math.round(4.5*S)); ctx.lineCap = 'round';
+    const aox = cx - w*0.03, aoy = shoulderY + (hipY - shoulderY)*0.15;
+    if (frame === 0) {
+      ctx.beginPath(); ctx.moveTo(aox, aoy); ctx.lineTo(aox + w*0.44, aoy - h*0.05); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(aox, aoy); ctx.lineTo(aox - w*0.36, aoy + h*0.06); ctx.stroke();
+    } else {
+      ctx.beginPath(); ctx.moveTo(aox, aoy); ctx.lineTo(aox + w*0.22, aoy + h*0.06); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(aox, aoy); ctx.lineTo(aox - w*0.50, aoy - h*0.05); ctx.stroke();
+    }
+
+    // Legs — bent thigh + shin, alternating stride
+    ctx.fillStyle = pants;
+    const lp = frame === 0 ? 1 : -1;
+
+    // Front leg: thigh forward-down, shin to ground
+    const fKx = cx + w*(0.28 + lp*0.04), fKy = hipY + (groundY - hipY)*0.52;
+    ctx.beginPath();
+    ctx.moveTo(cx + w*0.10, hipY); ctx.lineTo(cx + w*0.22, hipY);
+    ctx.lineTo(fKx + w*0.08, fKy); ctx.lineTo(fKx - w*0.04, fKy);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(fKx - w*0.04, fKy); ctx.lineTo(fKx + w*0.08, fKy);
+    ctx.lineTo(fKx + w*0.04, groundY); ctx.lineTo(fKx - w*0.08, groundY);
+    ctx.closePath(); ctx.fill();
+
+    // Back leg: thigh angled back, shin kicked up
+    const bKx = cx - w*(0.20 - lp*0.04), bKy = hipY + (groundY - hipY)*0.40;
+    const bFootY = hipY + (groundY - hipY)*0.10;
+    ctx.beginPath();
+    ctx.moveTo(cx - w*0.08, hipY); ctx.lineTo(cx + w*0.04, hipY);
+    ctx.lineTo(bKx + w*0.06, bKy); ctx.lineTo(bKx - w*0.06, bKy);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(bKx - w*0.06, bKy); ctx.lineTo(bKx + w*0.06, bKy);
+    ctx.lineTo(bKx - w*0.02, bFootY); ctx.lineTo(bKx - w*0.14, bFootY);
+    ctx.closePath(); ctx.fill();
+
+    // Shoes
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(fKx - w*0.12, groundY - Math.round(5*S), w*0.22, Math.max(4, Math.round(5*S)));
+    ctx.fillRect(bKx - w*0.16, bFootY - Math.round(3*S), w*0.20, Math.max(3, Math.round(4*S)));
+
+    // Sweat drop
+    if (extras && extras.sweat) {
+      ctx.fillStyle = COX_LIGHT;
+      ctx.beginPath(); ctx.arc(headCx + dkR, headCy - dkR*0.2, dkR*0.16, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(headCx+dkR*0.92, headCy-dkR*0.1); ctx.lineTo(headCx+dkR*1.08, headCy-dkR*0.1);
+      ctx.lineTo(headCx+dkR, headCy+dkR*0.22); ctx.closePath(); ctx.fill();
+    }
+
     return;
   }
 
   // Head
   ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(cx, y + hR, hR, 0, Math.PI*2); ctx.fill();
-  // Hair
-  ctx.fillStyle = extras && extras.hairColor ? extras.hairColor : '#3a2a1a';
-  ctx.beginPath(); ctx.arc(cx, y + hR, hR * 0.9, Math.PI, 0); ctx.fill();
   // Eyes
-  ctx.fillStyle = '#1a1a1a';
-  ctx.beginPath(); ctx.arc(cx - hR*0.34, y + hR*0.9, hR*0.11, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(cx + hR*0.34, y + hR*0.9, hR*0.11, 0, Math.PI*2); ctx.fill();
+  // Long hair (girls)
+  if (extras && extras.longHair) {
+    ctx.fillStyle = extras.longHair;
+    ctx.beginPath(); ctx.arc(cx, y + hR, hR*0.95, Math.PI, 0); ctx.fill();
+    ctx.fillRect(x - Math.round(2*S), y + hR, Math.round(7*S), h * 0.55);
+    ctx.fillRect(x + w - Math.round(5*S), y + hR, Math.round(7*S), h * 0.45);
+  }
+  // Bow
+  if (extras && extras.bow) {
+    ctx.fillStyle = extras.bow;
+    ctx.beginPath(); ctx.ellipse(cx - hR*0.55, y, hR*0.32, hR*0.18, -0.5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx + hR*0.55, y, hR*0.32, hR*0.18, 0.5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, y, hR*0.13, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.fillStyle = extras && extras.greenEyes ? '#22b055' : '#1a1a1a';
+  ctx.beginPath(); ctx.arc(cx - hR*0.34, y + hR*0.9, hR*0.13, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx + hR*0.34, y + hR*0.9, hR*0.13, 0, Math.PI*2); ctx.fill();
+  if (extras && extras.greenEyes) {
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(cx - hR*0.34, y + hR*0.9, hR*0.06, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx + hR*0.34, y + hR*0.9, hR*0.06, 0, Math.PI*2); ctx.fill();
+  }
+  // Face photo — drawn over skin/eyes, clipped to head circle
+  if (extras && extras.faceKey) {
+    const img = faceImgs[extras.faceKey];
+    if (img && img.complete && img.naturalWidth > 0) {
+      const fr = hR * 0.98;
+      const fhx = cx, fhy = y + hR;
+      ctx.save();
+      ctx.beginPath(); ctx.arc(fhx, fhy, fr, 0, Math.PI*2); ctx.clip();
+      ctx.drawImage(img, fhx - fr, fhy - fr * 0.9, fr * 2, fr * 2.1);
+      ctx.restore();
+    }
+  }
+
+  if (extras && extras.beard) {
+    ctx.fillStyle = extras.beard;
+    ctx.beginPath(); ctx.arc(cx, y + hR*1.52, hR*0.6, 0, Math.PI); ctx.fill();
+  }
 
   // Torso
   ctx.fillStyle = shirt; ctx.fillRect(x + 4, y + hR*2, w - 8, torH);
+  if (extras && extras.stripes) {
+    ctx.fillStyle = extras.stripes;
+    const sh = Math.max(2, Math.round(2*S));
+    for (let si = 0; si < 6; si++) ctx.fillRect(x + 4, y + hR*2 + (si + 0.4) * torH / 6, w - 8, sh);
+  }
 
   // Suit lapels (Alex)
   if (extras && extras.suit) {
@@ -338,6 +513,21 @@ function drawPerson(x, y, w, h, skin, shirt, pants, frame, ducking, extras) {
   ctx.fillRect(x+2,  y+hR*2+torH+legH+lo-2, (w-10)/2+4, Math.max(4, Math.round(6*S)));
   ctx.fillRect(cx-1, y+hR*2+torH+legH-lo-2, (w-10)/2+4, Math.max(4, Math.round(6*S)));
 
+  if (extras && extras.skirt) {
+    const sTop = y + hR*2 + torH*0.85, sBot = sTop + legH*0.72;
+    ctx.fillStyle = extras.skirt;
+    ctx.beginPath(); ctx.moveTo(x-1,sTop); ctx.lineTo(x+w+1,sTop); ctx.lineTo(x+w+w*0.18,sBot); ctx.lineTo(x-w*0.18,sBot); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = skin;
+    ctx.fillRect(x+4, sBot, (w-10)/2, y+hR*2+torH+legH-sBot);
+    ctx.fillRect(cx+1, sBot, (w-10)/2, y+hR*2+torH+legH-sBot);
+    ctx.fillStyle = extras.skirt;
+    ctx.fillRect(x+2, y+hR*2+torH+legH-3, (w-10)/2+4, Math.max(4, Math.round(5*S)));
+    ctx.fillRect(cx-1, y+hR*2+torH+legH-3, (w-10)/2+4, Math.max(4, Math.round(5*S)));
+    ctx.fillStyle = '#aaa';
+    ctx.fillRect(x+5,  y+hR*2+torH+legH+Math.round(1*S), 3, Math.round(4*S));
+    ctx.fillRect(cx+2, y+hR*2+torH+legH+Math.round(1*S), 3, Math.round(4*S));
+  }
+
   // Sweat drop (Intern Noob)
   if (extras && extras.sweat) {
     ctx.fillStyle = COX_LIGHT;
@@ -348,27 +538,31 @@ function drawPerson(x, y, w, h, skin, shirt, pants, frame, ducking, extras) {
   }
 }
 
-function drawNameTag(name, title, cx, topY) {
-  ctx.font = `bold ${Math.round(9*S)}px Arial`;
-  const nw = Math.max(ctx.measureText(name).width, ctx.measureText(`"${title}"`).width) + Math.round(14*S);
-  const bh = Math.round(28*S), bx = cx - nw/2, by = topY - bh - Math.round(4*S);
-  ctx.fillStyle = 'rgba(10,22,40,0.85)';
+function drawNameTag(name, title, cx, topY, small) {
+  const fs = small ? Math.round(7*S) : Math.round(9*S);
+  const fs2 = small ? Math.round(6*S) : Math.round(8*S);
+  ctx.font = `bold ${fs}px Arial`;
+  const nw = Math.max(ctx.measureText(name).width, ctx.measureText(`"${title}"`).width) + Math.round(10*S);
+  const bh = small ? Math.round(20*S) : Math.round(28*S);
+  const bx = cx - nw/2, by = topY - bh - Math.round(4*S);
+  ctx.fillStyle = 'rgba(10,22,40,0.82)';
   ctx.strokeStyle = COX_BLUE; ctx.lineWidth = 1;
   ctx.beginPath();
   if (ctx.roundRect) ctx.roundRect(bx, by, nw, bh, 4); else ctx.rect(bx, by, nw, bh);
   ctx.fill(); ctx.stroke();
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#fff'; ctx.font = `bold ${Math.round(9*S)}px Arial`;
-  ctx.fillText(name, cx, by + Math.round(12*S));
-  ctx.fillStyle = COX_LIGHT; ctx.font = `${Math.round(8*S)}px Arial`;
-  ctx.fillText(`"${title}"`, cx, by + Math.round(23*S));
+  ctx.fillStyle = '#fff'; ctx.font = `bold ${fs}px Arial`;
+  ctx.fillText(name, cx, by + (small ? Math.round(9*S) : Math.round(12*S)));
+  ctx.fillStyle = COX_LIGHT; ctx.font = `${fs2}px Arial`;
+  ctx.fillText(`"${title}"`, cx, by + (small ? Math.round(17*S) : Math.round(23*S)));
   ctx.textAlign = 'left';
 }
 
 // ── PLAYER ─────────────────────────────────────────────────────────────────
 function updatePlayer(dt) {
   player.frameTimer += dt;
-  if (player.frameTimer >= 0.11) { player.frameTimer = 0; player.frame = 1 - player.frame; }
+  const animThresh = 0.11 / ((230 + speedFactor * 0.028) / 230);
+  if (player.frameTimer >= animThresh) { player.frameTimer = 0; player.frame = 1 - player.frame; }
   if (!player.onGround) {
     player.vy += GRAVITY * S * dt;
     player.y  += player.vy * dt;
@@ -380,8 +574,13 @@ function drawPlayer() {
   const w = pw(), h = ph();
   const py = player.ducking ? GROUND - h*0.52 : player.y;
   const dh = player.ducking ? h*0.52 : h;
-  drawPerson(player.x, py, w, dh, '#FDBCB4', '#ffffff', '#C8A96E', player.frame, player.ducking, { sweat: true });
-  drawNameTag('Intern Noob', 'The Chosen One', player.x + w/2, py);
+  drawPerson(player.x, py, w, dh, '#fde8d0', '#ffffff', '#C8A96E', player.frame, player.ducking, { sweat: true });
+}
+
+function drawPlayerNameTag() {
+  const w = pw(), h = ph();
+  const py = player.ducking ? GROUND - h*0.52 : player.y;
+  drawNameTag('Intern Noob', 'The Chosen One', player.x + w/2, py, true);
 }
 
 function playerHitbox() {
@@ -463,7 +662,7 @@ function spawnObstacle() {
   obstacles.push({ ...def, w, h, x: W+20, y: GROUND-h+yo });
 }
 function updateObstacles(dt) {
-  const speed = (230 + steps*0.028) * S * deltaMultiplier;
+  const speed = (230 + speedFactor * 0.028) * S * deltaMultiplier;
   obstacleTimer += dt / deltaMultiplier;
   const interval = Math.max(0.85, 2.2 - steps*0.00013);
   if (obstacleTimer >= interval) { obstacleTimer=0; spawnObstacle(); }
@@ -474,29 +673,43 @@ function drawObstacles() { for (const ob of obstacles) ob.drawFn(ob.x, ob.y, ob.
 
 // ── CHASERS ────────────────────────────────────────────────────────────────
 const CHASER_DEFS = [
-  { name:'Nick',   title:'Iron Man',         ms:150, spd:88,  shirt:'#cc2200', pants:'#1a1a1a', extras:{chestArc:'#ffd700'}, fixedOffset:45  },
-  { name:'Nikki',  title:'Sugar Cat Mom',    ms:300, spd:112, shirt:'#8b5cf6', pants:'#2a1040', extras:null,                 fixedOffset:93  },
-  { name:'Sam',    title:'Oui Oui Baguette', ms:450, spd:138, shirt:'#6b7280', pants:'#374151', extras:null,                 fixedOffset:141 },
-  { name:'Andrew', title:'Wise Sage of Beer',ms:600, spd:168, shirt:'#16a34a', pants:'#14532d', extras:{clipboard:true},     fixedOffset:189 },
+  { name:'Nick',   title:'Iron Man',         ms:0,   spd:88,  skin:'#fde8d0', shirt:'#f0f0f0', pants:'#3d6fa8', extras:{stripes:'#4a90d9',faceKey:'Nick'}, fixedOffset:90 },
+  { name:'Nikki',  title:'Sugar Cat Mom',    ms:100, spd:112, skin:'#fde8d0', charH:52, shirt:'#f48fb1', pants:'#fde8d0', extras:{skirt:'#f5f5f5',faceKey:'Nikki'}, fixedOffset:90 },
+  { name:'Sam',    title:'Oui Oui Baguette', ms:200, spd:138, skin:'#fde8d0', shirt:'#dde3ee', pants:'#374151', extras:{suit:'#2d3748',tie:'#7c1d1d'}, fixedOffset:90 },
+  { name:'Andrew', title:'Wise Sage of Beer',ms:300, spd:168, skin:'#fde8d0', charH:76, shirt:'#3a6fb8', pants:'#c8a464', extras:{beard:'#f0f0f0',clipboard:true}, fixedOffset:90 },
 ];
-const ALEX_DEF = { name:'Alex Taylor', title:'Aura King', ms:750, shirt:'#111', pants:'#0a0a0a', extras:{suit:'#222',tie:'#cc0000'}, fixedOffset:237 };
+const ALEX_DEF = { name:'Alex Taylor', title:'Aura King', ms:400, shirt:'#a8d4f5', pants:'#1a2a3a', extras:{greenEyes:true,faceKey:'Alex Taylor'}, fixedOffset:90 };
 
 function updateChasers(dt) {
   const ch = Math.round(60*S);
-  for (const def of CHASER_DEFS) {
-    if (steps >= def.ms && !activeChasers.find(c => c.name===def.name))
-      activeChasers.push({ ...def, x: -Math.round(90*S), y: GROUND-ch, ducking: false, frame:0, frameTimer:0 });
+  if (!alexSpawned) {
+    let targetDef = null;
+    for (const def of CHASER_DEFS) { if (steps >= def.ms) targetDef = def; }
+    const alreadyActive = targetDef && activeChasers.find(c => c.name===targetDef.name);
+    const swapInProgress = activeChasers.some(c => c.leaving);
+    if (targetDef && !alreadyActive && !swapInProgress) {
+      for (const c of activeChasers) c.leaving = true;
+      activeChasers.push({ ...targetDef, x: -Math.round(90*S), y: GROUND-ch, ducking: false, frame:0, frameTimer:0 });
+    }
   }
-  if (steps >= ALEX_DEF.ms && !alexObj)
+  if (steps >= ALEX_DEF.ms && !alexObj && !alexSpawned) {
+    alexSpawned = true;
     alexObj = { ...ALEX_DEF, x:-Math.round(100*S), frame:0, frameTimer:0, flying:false, flyVy:0, flyTimer:0, y:GROUND-Math.round(64*S), ducking:false };
+    for (const c of activeChasers) c.leaving = true;
+  }
 
   for (const c of activeChasers) {
     c.frameTimer += dt; if (c.frameTimer>=0.1){c.frameTimer=0;c.frame=1-c.frame;}
-    const fixedX = player.x - Math.round(c.fixedOffset * S);
-    c.x = Math.min(c.x + c.spd*S*deltaMultiplier*dt, fixedX);
-    c.y = player.y;
-    c.ducking = player.ducking;
+    if (c.leaving) {
+      c.x -= Math.round(180*S) * deltaMultiplier * dt;
+    } else {
+      const fixedX = player.x - Math.round(c.fixedOffset * S);
+      c.x = Math.min(c.x + c.spd*S*deltaMultiplier*dt, fixedX);
+      c.y = player.y;
+      c.ducking = player.ducking;
+    }
   }
+  activeChasers = activeChasers.filter(c => !c.leaving || c.x > -Math.round(160*S));
   if (alexObj) {
     alexObj.frameTimer+=dt; if(alexObj.frameTimer>=0.08){alexObj.frameTimer=0;alexObj.frame=1-alexObj.frame;}
     if (alexObj.flying) {
@@ -513,20 +726,72 @@ function updateChasers(dt) {
 
 function drawChasers() {
   const cw=Math.round(38*S), ch=Math.round(60*S);
+  const airOffset = player.y - (GROUND - ph());
   for (const c of activeChasers) {
-    const cy = c.ducking ? GROUND - ch*0.52 : c.y;
-    const cdh = c.ducking ? ch*0.52 : ch;
-    drawPerson(c.x, cy, cw, cdh, '#FDBCB4', c.shirt, c.pants, c.frame, c.ducking, c.extras);
-    drawNameTag(c.name, c.title, c.x+cw/2, cy);
+    const charH = c.charH ? Math.round(c.charH*S) : ch;
+    const cy = c.ducking ? GROUND - charH*0.52 : GROUND - charH + airOffset;
+    const cdh = c.ducking ? charH*0.52 : charH;
+    drawPerson(c.x, cy, cw, cdh, c.skin||'#fde8d0', c.shirt, c.pants, c.frame, c.ducking, c.extras);
+    drawNameTag(c.name, c.title, c.x+cw/2, cy, true);
   }
   if (alexObj) {
-    const aw=Math.round(44*S), ah=Math.round(64*S);
-    const ay = alexObj.ducking ? GROUND - ah*0.52 : alexObj.y;
+    const aw=Math.round(48*S), ah=Math.round(68*S);
+    const ay = alexObj.ducking ? GROUND - ah*0.52 : GROUND - ah + airOffset;
     const adh = alexObj.ducking ? ah*0.52 : ah;
-    drawPerson(alexObj.x, ay, aw, adh, '#FDBCB4', alexObj.shirt, alexObj.pants, alexObj.frame, alexObj.ducking, alexObj.extras);
-    drawNameTag(alexObj.name, alexObj.title, alexObj.x+aw/2, ay);
+    if (!alexObj.flying) drawAlexAura(alexObj.x, ay, aw, adh);
+    drawPerson(alexObj.x, ay, aw, adh, '#fde8d0', alexObj.shirt, alexObj.pants, alexObj.frame, alexObj.ducking, alexObj.extras);
+    drawNameTag(alexObj.name, alexObj.title, alexObj.x+aw/2, ay, true);
     if (alexObj.flying){ ctx.font=`${Math.round(24*S)}px Arial`; ctx.fillText('💥',alexObj.x+6,ay-8); }
   }
+}
+
+// ── ALEX AURA ──────────────────────────────────────────────────────────────
+function drawAlexAura(x, y, w, h) {
+  const cx = x + w/2, cy = y + h*0.5;
+  const pulse = 0.5 + 0.5*Math.sin(auraTime*4);
+  const pulse2 = 0.5 + 0.5*Math.sin(auraTime*6 + 1);
+
+  // Outer body glow
+  const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, w*2.2 + pulse*w*0.5);
+  g.addColorStop(0,   `rgba(255,220,0,${0.28+pulse*0.12})`);
+  g.addColorStop(0.35,`rgba(255,160,0,${0.16+pulse*0.06})`);
+  g.addColorStop(0.7, `rgba(255,80,0,${0.07})`);
+  g.addColorStop(1,   'rgba(255,50,0,0)');
+  ctx.save(); ctx.globalCompositeOperation='lighter';
+  ctx.fillStyle=g;
+  ctx.beginPath(); ctx.ellipse(cx, cy, w*2.2+pulse*w*0.5, h*1.1+pulse*h*0.15, 0, 0, Math.PI*2); ctx.fill();
+
+  // Flame spikes upward
+  const numSpikes = 8;
+  for (let i=0; i<numSpikes; i++) {
+    const t = auraTime*2.8 + i*(Math.PI*2/numSpikes);
+    const spikeH = (h*0.55 + Math.sin(t)*h*0.28) * (0.75+pulse*0.25);
+    const ox = (i - numSpikes/2 + 0.5) * (w/numSpikes) * 2.2;
+    const sw = w*0.14 + Math.sin(t*1.3)*w*0.04;
+    ctx.fillStyle = `rgba(255,${170+Math.floor(Math.sin(t)*50)},0,${0.45+pulse*0.25})`;
+    ctx.beginPath();
+    ctx.moveTo(cx+ox-sw, y+4); ctx.quadraticCurveTo(cx+ox, y-spikeH, cx+ox+sw, y+4);
+    ctx.closePath(); ctx.fill();
+  }
+
+  // Orbiting particles
+  for (let i=0; i<16; i++) {
+    const angle = auraTime*1.8 + i*(Math.PI*2/16);
+    const r = w*(0.9 + 0.45*Math.sin(auraTime*2.5+i*0.7));
+    const px2 = cx + Math.cos(angle)*r;
+    const py2 = cy + Math.sin(angle)*r*0.55;
+    const pr = Math.max(1, (1.8+Math.sin(auraTime*5+i)*1.2)*S);
+    const alpha = 0.5+0.5*Math.sin(auraTime*3+i);
+    ctx.fillStyle = `rgba(255,${200+Math.floor(Math.sin(i)*40)},0,${alpha})`;
+    ctx.beginPath(); ctx.arc(px2, py2, pr, 0, Math.PI*2); ctx.fill();
+  }
+
+  // Inner bright core outline
+  ctx.globalCompositeOperation='source-over';
+  ctx.strokeStyle=`rgba(255,240,100,${0.35+pulse2*0.25})`;
+  ctx.lineWidth=Math.max(2, Math.round(3*S));
+  ctx.beginPath(); ctx.ellipse(cx, cy, w*0.62+pulse2*w*0.08, h*0.52+pulse2*h*0.05, 0, 0, Math.PI*2); ctx.stroke();
+  ctx.restore();
 }
 
 // ── JUKE ───────────────────────────────────────────────────────────────────
@@ -591,7 +856,7 @@ function endGame(msg,px,py){
   setTimeout(()=>{renderLB(gameoverLB,lastCurrentScore);gameoverScreen.classList.remove('hidden');},600);
 }
 function startGame(){
-  state='running';steps=0;obstacles=[];activeChasers=[];alexObj=null;
+  state='running';steps=0;speedFactor=0;auraTime=0;alexSpawned=false;obstacles=[];activeChasers=[];alexObj=null;
   jukeState=0;jukeTimer=0;particles=[];shakeTimer=0;shakeAmt=0;
   deltaMultiplier=1;obstacleTimer=0;bgFar=0;bgNear=0;alexBaseSpeed=220;lastCurrentScore=null;
   player.x=PLAYER_X;player.y=GROUND-ph();player.vy=0;player.onGround=true;player.ducking=false;player.frame=0;player.frameTimer=0;
@@ -606,6 +871,7 @@ function loop(ts){
   const rawDt=Math.min((ts-lastTime)/1000,0.05);lastTime=ts;
   const dt=rawDt*deltaMultiplier;
   steps+=STEP_RATE*(1+steps*0.00018)*rawDt;
+  speedFactor=steps; auraTime+=rawDt;
   stepDisplay.textContent=Math.floor(steps).toLocaleString();
   if(shakeTimer>0){shakeTimer-=rawDt;canvas.style.transform=`translate(${(Math.random()-0.5)*shakeAmt}px,${(Math.random()-0.5)*shakeAmt}px)`;}else{canvas.style.transform='';}
   drawBackground(rawDt);
@@ -614,6 +880,7 @@ function loop(ts){
   updateChasers(dt);drawChasers();
   updateJuke(rawDt);updateParticles(dt);drawParticles();
   if(steps>2000){const pct=Math.min((steps-2000)/8000,1);ctx.fillStyle=`rgba(0,87,168,${0.05+pct*0.1})`;ctx.fillRect(0,0,W,H);}
+  drawPlayerNameTag();
   if(state==='running')checkCollisions();
   requestAnimationFrame(loop);
 }
