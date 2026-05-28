@@ -112,7 +112,6 @@ body { background: #0A1628; overflow: hidden; font-family: 'Barlow', 'Segoe UI',
     <div class="ss-controls">
       <div class="ss-ctrl"><span class="ss-key">SPACE / ↑</span><span class="ss-ctrl-label">Jump</span></div>
       <div class="ss-ctrl"><span class="ss-key">↓</span><span class="ss-ctrl-label">Duck</span></div>
-      <div class="ss-ctrl"><span class="ss-key">← →</span><span class="ss-ctrl-label">Juke Alex</span></div>
     </div>
     <button class="btn ss-start-btn" id="start-btn">▶ Start Running</button>
     <div id="start-leaderboard" class="leaderboard hidden"></div>
@@ -155,7 +154,6 @@ const GRAVITY     = 1750;
 const JUMP_VEL    = -660;
 const STEP_RATE   = 12;
 const LS_KEY      = 'coxdash_v1';
-const JUKE_WINDOW = 0.42;
 
 // player dimensions as functions of S
 const pw = () => Math.round(40 * S);
@@ -167,7 +165,6 @@ let particles = [], shakeTimer = 0, shakeAmt = 0;
 let bgFar = 0, bgNear = 0;
 let obstacles = [], obstacleTimer = 0;
 let activeChasers = [], alexObj = null;
-let jukeState = 0, jukeTimer = 0;
 let scores = [], lastCurrentScore = null;
 let alexBaseSpeed = 220;
 
@@ -694,7 +691,7 @@ function updateChasers(dt) {
   }
   if (steps >= ALEX_DEF.ms && !alexObj && !alexSpawned) {
     alexSpawned = true;
-    alexObj = { ...ALEX_DEF, x:-Math.round(100*S), frame:0, frameTimer:0, flying:false, flyVy:0, flyTimer:0, y:GROUND-Math.round(64*S), ducking:false };
+    alexObj = { ...ALEX_DEF, x:-Math.round(100*S), frame:0, frameTimer:0, y:GROUND-Math.round(64*S), ducking:false };
     for (const c of activeChasers) c.leaving = true;
   }
 
@@ -712,15 +709,10 @@ function updateChasers(dt) {
   activeChasers = activeChasers.filter(c => !c.leaving || c.x > -Math.round(160*S));
   if (alexObj) {
     alexObj.frameTimer+=dt; if(alexObj.frameTimer>=0.08){alexObj.frameTimer=0;alexObj.frame=1-alexObj.frame;}
-    if (alexObj.flying) {
-      alexObj.flyTimer+=dt; alexObj.x+=Math.round(380*S)*dt; alexObj.flyVy+=900*S*dt; alexObj.y+=alexObj.flyVy*dt;
-      if (alexObj.flyTimer>1.0){alexObj=null;jukeState=0;deltaMultiplier=1;alexBaseSpeed=Math.min(alexBaseSpeed+25,340);}
-    } else {
-      const fixedX = player.x - Math.round(ALEX_DEF.fixedOffset * S);
-      alexObj.x = Math.min(alexObj.x + alexBaseSpeed*S*deltaMultiplier*dt, fixedX);
-      alexObj.y = player.y;
-      alexObj.ducking = player.ducking;
-    }
+    const fixedX = player.x - Math.round(ALEX_DEF.fixedOffset * S);
+    alexObj.x = Math.min(alexObj.x + alexBaseSpeed*S*deltaMultiplier*dt, fixedX);
+    alexObj.y = player.y;
+    alexObj.ducking = player.ducking;
   }
 }
 
@@ -738,10 +730,9 @@ function drawChasers() {
     const aw=Math.round(48*S), ah=Math.round(68*S);
     const ay = alexObj.ducking ? GROUND - ah*0.52 : GROUND - ah + airOffset;
     const adh = alexObj.ducking ? ah*0.52 : ah;
-    if (!alexObj.flying) drawAlexAura(alexObj.x, ay, aw, adh);
+    drawAlexAura(alexObj.x, ay, aw, adh);
     drawPerson(alexObj.x, ay, aw, adh, '#fde8d0', alexObj.shirt, alexObj.pants, alexObj.frame, alexObj.ducking, alexObj.extras);
     drawNameTag(alexObj.name, alexObj.title, alexObj.x+aw/2, ay, true);
-    if (alexObj.flying){ ctx.font=`${Math.round(24*S)}px Arial`; ctx.fillText('💥',alexObj.x+6,ay-8); }
   }
 }
 
@@ -794,27 +785,6 @@ function drawAlexAura(x, y, w, h) {
   ctx.restore();
 }
 
-// ── JUKE ───────────────────────────────────────────────────────────────────
-function handleJukeKey(code) {
-  if (!alexObj||alexObj.flying) return;
-  if (code==='ArrowLeft'&&jukeState===0){jukeState=1;jukeTimer=JUKE_WINDOW;}
-  else if (code==='ArrowRight'&&jukeState===1) triggerJuke();
-}
-function updateJuke(rawDt){ if(jukeState===1){jukeTimer-=rawDt;if(jukeTimer<=0)jukeState=0;} }
-function triggerJuke() {
-  if (!alexObj) return;
-  alexObj.flying=true; alexObj.flyVy=-320*S; steps+=500; deltaMultiplier=0.2;
-  spawnParticles(player.x+pw(), GROUND-Math.round(50*S), '#ff2244', 24);
-  spawnParticles(player.x+pw(), GROUND-Math.round(50*S), COX_LIGHT, 12);
-  triggerShake(Math.round(10*S), 0.5);
-  const el=document.createElement('div');
-  el.textContent='💨 JUKED! +500 steps!';
-  el.style.cssText=`position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);font-size:${Math.round(26*S)}px;font-weight:900;color:#ffd700;text-shadow:2px 2px 8px rgba(0,0,0,0.9);pointer-events:none;z-index:30;animation:fadeUp 1.3s ease forwards;`;
-  document.getElementById('game-container').appendChild(el);
-  setTimeout(()=>el.remove(),1300);
-  setTimeout(()=>{if(deltaMultiplier<1)deltaMultiplier=1;},1100);
-}
-
 // ── COLLISIONS ─────────────────────────────────────────────────────────────
 function rectsOverlap(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
 function checkCollisions() {
@@ -857,7 +827,7 @@ function endGame(msg,px,py){
 }
 function startGame(){
   state='running';steps=0;speedFactor=0;auraTime=0;alexSpawned=false;obstacles=[];activeChasers=[];alexObj=null;
-  jukeState=0;jukeTimer=0;particles=[];shakeTimer=0;shakeAmt=0;
+  particles=[];shakeTimer=0;shakeAmt=0;
   deltaMultiplier=1;obstacleTimer=0;bgFar=0;bgNear=0;alexBaseSpeed=220;lastCurrentScore=null;
   player.x=PLAYER_X;player.y=GROUND-ph();player.vy=0;player.onGround=true;player.ducking=false;player.frame=0;player.frameTimer=0;
   startScreen.classList.add('hidden');gameoverScreen.classList.add('hidden');canvas.style.transform='';
@@ -878,7 +848,7 @@ function loop(ts){
   updatePlayer(dt);drawPlayer();
   updateObstacles(dt);drawObstacles();
   updateChasers(dt);drawChasers();
-  updateJuke(rawDt);updateParticles(dt);drawParticles();
+  updateParticles(dt);drawParticles();
   if(steps>2000){const pct=Math.min((steps-2000)/8000,1);ctx.fillStyle=`rgba(0,87,168,${0.05+pct*0.1})`;ctx.fillRect(0,0,W,H);}
   drawPlayerNameTag();
   if(state==='running')checkCollisions();
@@ -894,8 +864,6 @@ document.addEventListener('keydown',e=>{
   if(state==='running'){
     if(e.code==='Space'||e.code==='ArrowUp'){if(player.onGround&&!player.ducking){player.vy=JUMP_VEL*S;player.onGround=false;}}
     if(e.code==='ArrowDown')player.ducking=true;
-    if(e.code==='ArrowLeft')handleJukeKey('ArrowLeft');
-    if(e.code==='ArrowRight')handleJukeKey('ArrowRight');
   }
 });
 document.addEventListener('keyup',e=>{held[e.code]=false;if(e.code==='ArrowDown')player.ducking=false;});

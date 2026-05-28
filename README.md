@@ -10,7 +10,6 @@ Open `index.html` in any browser. No install, no server, no build step.
 |---|---|
 | Space or Up Arrow | Jump over low obstacles |
 | Down Arrow | Duck under high obstacles |
-| Left then Right Arrow (quickly) | Juke Alex Taylor |
 
 Managers chase from behind but they cannot catch you on their own. The only way to die is colliding with an obstacle.
 
@@ -41,8 +40,6 @@ Managers appear progressively as your step count climbs. Each one is faster than
 | Sam | Oui Oui Baguette | 200 steps |
 | Andrew | Wise Sage of Beer | 300 steps |
 | Alex Taylor | Aura King / Final Boss | 400 steps |
-
-Alex Taylor can be juked with a quick left then right arrow input. A successful juke launches Alex into the wall, awards 500 bonus steps, and triggers a slow motion effect. After recovering, Alex respawns slightly faster.
 
 ## Architecture
 
@@ -111,3 +108,5 @@ This project was built using the Speckit workflow inside Claude Code. Speckit is
 5. `/speckit-implement` — Claude Code executed the tasks in order, reading from the spec and plan at each step to stay consistent with the original intent.
 
 The result is that the game design was fully locked before any code was written. When decisions came up during implementation (like adding face photos despite the constitution saying no external assets), there was a clear written baseline to compare against.
+
+Note: the original spec included a juke mechanic for Alex Taylor that was removed during implementation.
